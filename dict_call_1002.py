@@ -76,7 +76,30 @@ def find_shortest_iterat_seq(number, words):
 	else:
 		return ' '.join(word_t_min)
 		
-			
+def find_shortest_dp(phoneNum, word):
+	len_phoneNum = len(phoneNum)
+	dp = [10000000 for x in xrange(len_phoneNum+10)]
+	path = [-1 for x in xrange(len_phoneNum+10)]
+	dp[0] = 0
+	for i in xrange(1, len_phoneNum):
+		for j in xrange(len(word)):
+			len_word = len(word[j][0])
+			if(((len_word + i-1) <= len_phoneNum) and (phoneNum[i-1:len_word+i-1] == word[j][1])):
+				if(dp[i + len_word - 1] > dp[i-1] + 1):
+					dp[i + len_word - 1] = dp[i-1] + 1
+					path[i + len_word - 1] = j
+	
+	if(path[len_phoneNum] == -1):
+		return "No solution."
+	else:
+		ans = []
+		k = len_phoneNum
+		while(path[k] != -1):
+			ans.insert(0, word[path[k]][0])
+			k = k - len(word[path[k]][0])
+		
+		return ' '.join(ans)
+
 tests_list = []
 lines = []
 for line in stdin:
@@ -85,19 +108,19 @@ for line in stdin:
 		break
 i = 0
 while(lines[i] != '-1'):
-	dict = {}
-	dict['number'] = lines[i]
+	dict = []
+	dict.append(lines[i])
 	i = i + 1
-	dict['dict_length'] = long(lines[i])
+	dict.append(long(lines[i]))
 	i = i + 1
-	dict['dict_words'] = []
-	for x in xrange(dict['dict_length']):
+	dict.append([])
+	for x in xrange(dict[1]):
 		word = lines[i]
 		i = i + 1
-		dict['dict_words'].append((word, word_to_nubmer(word)))
+		dict[2].append((word, word_to_nubmer(word)))
+		#dict[2].append(word)
 	tests_list.append(dict)
 	line = lines[i]
 
 for test in tests_list:
-	test['dict_words'].sort(lambda x, y : len(y[0]) - len(x[0]))
-	stdout.write(find_shortest_iterat_seq(test['number'], test['dict_words']) + '\n')
+	stdout.write(find_shortest_dp(test[0], test[2]) + '\n')
