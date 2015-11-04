@@ -15,7 +15,7 @@ for i in xrange(number_of_points - 1):
 	L[int(input[1])-1].append(int(input[1])-1)
 	W[int(input[0])-1].append(int(input[2]))
 	W[int(input[1])-1].append(int(input[2]))
-
+print L, W
 print L, W
 def solve(cur, prev, q):
 	if (q==0):
